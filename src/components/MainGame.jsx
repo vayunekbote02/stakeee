@@ -86,6 +86,9 @@ const MainGame = () => {
               : index === winningSquare
               ? "bg-green-500"
               : "bg-red-500"
+          } ${
+            !gameStarted &&
+            "border-gray-300 hover:bg-gray-200 cursor-not-allowed"
           }`}
           onClick={() => handleSquareClick(index)}
         />
@@ -95,6 +98,7 @@ const MainGame = () => {
   const mainStartandPlayAgain = () => {
     setMainStart(true);
     setGameResult(null);
+    setClickedSquares([]);
   };
 
   const handleChange = (e) => {
@@ -112,7 +116,10 @@ const MainGame = () => {
     setHighestPurse(100);
     setLowestPurse(100);
     setGamesPlayed(0);
+    setBet(0);
+    setGameResult(null);
     setClickedSquares([]);
+    setGameStarted(true);
     setShowModal(false);
   };
 
@@ -183,17 +190,24 @@ const MainGame = () => {
           <div className="flex flex-col space-y-4">
             <button
               onClick={mainStartandPlayAgain}
-              className="w-full px-4 py-2 text-white transition-colors duration-200 bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className={`w-full px-4 py-2 ${
+                gameStarted
+                  ? "bg-gray-500"
+                  : "text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              } transition-colors duration-200  rounded-md `}
+              disabled={gameStarted}
             >
-              {gamesPlayed == 0 ? "Start Game" : "Play Again"}
+              {gamesPlayed == 0 && !gameStarted ? "Start Game" : "Play Again"}
             </button>
-            {gamesPlayed > 4 && (
+            {gamesPlayed > 4 && !gameStarted ? (
               <button
                 onClick={() => checkOutModalToggle()}
                 className="w-full px-4 py-2 text-white transition-colors duration-200 bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
               >
                 Checkout
               </button>
+            ) : (
+              <></>
             )}
           </div>
         )}
